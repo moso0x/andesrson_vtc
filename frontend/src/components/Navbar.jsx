@@ -8,7 +8,8 @@ const Navbar = () => {
   const navigate = useNavigate();
   return (
     <div className="shadow-md px-6 py-4">
-      <div className="max-w-6xl flex justify-between items-center mx-auto">
+      <div className=" flex justify-between items-center mx-auto">
+      
         <p
           className="font-semibold text-2xl flex justify-center items-center cursor-pointer"
           onClick={() => navigate("/")}
@@ -18,6 +19,7 @@ const Navbar = () => {
           </span>{" "}
           {router.state && router.state.type} Dashboard
         </p>
+        <div><p className="text-3xl">Anderson Vocational Training Center</p></div>
         <button
           className="flex justify-center items-center text-red-500 px-3 py-2 font-semibold rounded-sm"
           onClick={() => navigate("/")}
