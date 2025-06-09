@@ -70,12 +70,12 @@ const Material = () => {
       });
   };
   return (
-    <div className="w-full mx-auto mt-10 flex justify-center items-start flex-col mb-10">
-      <div className="flex justify-between items-center w-full">
+    <div className="w-full mx-auto mt-10 flex justify-around flex-col mb-10">
+      <div className="flex justify-between  w-full">
         <Heading title={`Upload Material`} />
       </div>
       <div className="w-full flex justify-evenly items-center mt-12">
-        <div className="w-1/2 flex flex-col justify-center items-center">
+        <div className="w-1/2 flex flex-col  ">
           <div className="w-[80%] mt-2">
             <label htmlFor="title">Material Title</label>
             <input

@@ -179,13 +179,13 @@ const Notice = () => {
   };
 
   return (
-    <div className="w-full mx-auto flex justify-center items-start flex-col my-10">
-      <div className="relative flex justify-between items-center w-full">
+    <div className="w-full mx-auto flex px-10  flex-col my-10">
+      <div className="relative flex justify-around items-center w-full">
         <Heading title="Notices" />
         {(router.pathname === "/faculty" || router.pathname === "/admin") &&
           (open ? (
             <button
-              className="absolute right-2 flex justify-center items-center border-2 border-red-500 px-3 py-2 rounded text-red-500"
+              className=" right-2 flex justify-center items-center border-2 border-red-500 px-3 py-2 rounded text-red-500"
               onClick={openHandler}
             >
               <span className="mr-2">
@@ -224,7 +224,7 @@ const Notice = () => {
                         className="text-2xl group-hover:text-blue-500 ml-2 cursor-pointer hover:text-red-500"
                         onClick={() => deleteNoticehandler(item._id)}
                       >
-                        <MdDeleteOutline />
+                        <MdDeleteOutline className="text-[]"/>
                       </span>
                       <span
                         className="text-2xl group-hover:text-blue-500 ml-2 cursor-pointer hover:text-blue-500"

@@ -1,4 +1,4 @@
-const connectToMongo = require("./Database/db");
+const connectToMongo = require("./database/db");
 const express = require("express");
 const app = express();
 const path = require("path")

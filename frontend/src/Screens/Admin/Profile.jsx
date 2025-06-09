@@ -21,7 +21,7 @@ const Profile = () => {
     axios
       .post(
         `${baseApiURL()}/${router.state.type}/details/getDetails`,
-        { employeeId: router.state.loginid },
+        { enrollmentNo: router.state.loginid },
         {
           headers: headers,
         }
@@ -53,7 +53,7 @@ const Profile = () => {
     };
     axios
       .post(
-        `${baseApiURL()}/admin/auth/login`,
+        `${baseApiURL()}/student/auth/login`,
         { loginid: router.state.loginid, password: password.current },
         {
           headers: headers,
@@ -78,7 +78,7 @@ const Profile = () => {
     };
     axios
       .put(
-        `${baseApiURL()}/admin/auth/update/${id}`,
+        `${baseApiURL()}/student/auth/update/${id}`,
         { loginid: router.state.loginid, password: password.new },
         {
           headers: headers,
@@ -108,7 +108,11 @@ const Profile = () => {
             </p>
             <div className="mt-3">
               <p className="text-lg font-normal mb-2">
-                Employee Id: {data.employeeId}
+                Enrollment No: {data.enrollmentNo}
+              </p>
+              <p className="text-lg font-normal mb-2">Branch: {data.branch}</p>
+              <p className="text-lg font-normal mb-2">
+                Semester: {data.semester}
               </p>
               <p className="text-lg font-normal mb-2">
                 Phone Number: +91 {data.phoneNumber}
@@ -161,7 +165,7 @@ const Profile = () => {
           <img
             src={process.env.REACT_APP_MEDIA_LINK + "/" + data.profile}
             alt="student profile"
-            className="h-[200px] w-[200px] object-cover rounded-lg shadow-md"
+            className="h-[240px] w-[240px] object-cover rounded-lg shadow-md"
           />
         </>
       )}

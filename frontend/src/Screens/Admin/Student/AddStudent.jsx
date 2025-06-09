@@ -161,7 +161,7 @@ const AddStudent = () => {
           Enter Enrollment No
         </label>
         <input
-          type="number"
+          type="text"
           id="enrollmentNo"
           value={data.enrollmentNo}
           onChange={(e) => setData({ ...data, enrollmentNo: e.target.value })}

@@ -2,8 +2,9 @@ const mongoose = require("mongoose");
 
 const studentDetails = new mongoose.Schema({
   enrollmentNo: {
-    type: Number,
+    type: String,
     required: true,
+    match: [/^[a-zA-Z0-9-]+$/, "Enrollment number can only contain letters, numbers, and hyphens"]
   },
   firstName: {
     type: String,
@@ -20,10 +21,12 @@ const studentDetails = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+    match: [/^\S+@\S+\.\S+$/, "Please use a valid email address"],
   },
   phoneNumber: {
-    type: Number,
+    type: String,
     required: true,
+    match: [/^[0-9\-+() ]+$/, "Phone number can contain digits, spaces, hyphens, parentheses, and plus signs"],
   },
   semester: {
     type: Number,
@@ -36,6 +39,7 @@ const studentDetails = new mongoose.Schema({
   gender: {
     type: String,
     required: true,
+    enum: ["Male", "Female", "Other"],
   },
   profile: {
     type: String,
@@ -43,4 +47,4 @@ const studentDetails = new mongoose.Schema({
   }
 }, { timestamps: true });
 
-module.exports = mongoose.model("Student Detail", studentDetails);
+module.exports = mongoose.model("Student", studentDetails);

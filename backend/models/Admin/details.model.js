@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const adminDetails = new mongoose.Schema({
   employeeId: {
-    type: Number,
+    type:  mongoose.Schema.Types.Mixed,
     required: true,
   },
   firstName: {

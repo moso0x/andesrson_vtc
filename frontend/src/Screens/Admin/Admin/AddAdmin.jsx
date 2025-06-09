@@ -132,7 +132,7 @@ const AddAdmin = () => {
           Enter Employee Id
         </label>
         <input
-          type="number"
+          type="text"
           id="employeeId"
           value={data.employeeId}
           onChange={(e) => setData({ ...data, employeeId: e.target.value })}

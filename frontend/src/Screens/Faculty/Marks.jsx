@@ -125,7 +125,7 @@ const Marks = () => {
   };
 
   return (
-    <div className="w-full mx-auto flex justify-center items-start flex-col my-10">
+    <div className="w-full flex py-4 items-start flex-row sm:flex-col ">
       <div className="relative flex justify-between items-center w-full">
         <Heading title={`Upload Marks`} />
         {studentData && (

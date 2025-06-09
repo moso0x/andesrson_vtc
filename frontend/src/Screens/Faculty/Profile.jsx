@@ -5,6 +5,9 @@ import { baseApiURL } from "../../baseUrl";
 import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { setUserData } from "../../redux/actions";
+import { CiEdit } from "react-icons/ci";
+<CiEdit />
+
 const Profile = () => {
   const [showPass, setShowPass] = useState(false);
   const router = useLocation();
@@ -97,17 +100,25 @@ const Profile = () => {
   };
 
   return (
-    <div className="w-full mx-auto my-8 flex justify-between items-start">
+    <div className="w-full mx-auto my-8 flex justify-around items-start shadow-lg">
       {data && (
-        <>
-          <div>
-            <p className="text-2xl font-semibold">
-              Hello {data[0].firstName} {data[0].middleName} {data[0].lastName}{" "}
-              👋
+     
+        < >
+     
+         
+          <div className="shadow-xl borrder border-2px  sm:flex p-4 gap-8 border-top blue ">
+          <div  className="gap-4">
+           
+            <p className="text-3xl pb-4 bold text-blue-600 ">Personal Details</p>  
+            <p className="text-xl font-semibold">
+              {data[0].firstName} {data[0].middleName} {data[0].lastName}{" "}
+             
             </p>
             <div className="mt-3">
-              <p className="text-lg font-normal mb-2">
-                Employee Id: {data[0].employeeId}
+              <p className="text-lg font-normal mb-2 gap-8">
+                <span>  Employee Id: </span>
+                <span> {data[0].employeeId}</span>
+              
               </p>
               <p className="text-lg font-normal mb-2">Post: {data[0].post}</p>
               <p className="text-lg font-normal mb-2">
@@ -122,11 +133,12 @@ const Profile = () => {
             </div>
             <button
               className={`${
-                showPass ? "bg-red-100 text-red-600" : "bg-blue-600 text-white"
+                showPass ? "bg-red-100 text-red-600" : "bg-blue-600 text-white flex"
               }  px-3 py-1 rounded mt-4`}
               onClick={() => setShowPass(!showPass)}
             >
-              {!showPass ? "Change Password" : "Close Change Password"}
+               <CiEdit />
+              {!showPass ? "  Update Password" : "Close"}
             </button>
             {showPass && (
               <form
@@ -152,11 +164,11 @@ const Profile = () => {
                   className="px-3 py-1 border-2 border-blue-500 outline-none rounded mt-4"
                 />
                 <button
-                  className="mt-4 hover:border-b-2 hover:border-blue-500"
+                  className="mt-4 hover:border-b-2 hover:border-blue-700"
                   onClick={checkPasswordHandler}
                   type="submit"
                 >
-                  Change Password
+                Update Password
                 </button>
               </form>
             )}
@@ -166,6 +178,7 @@ const Profile = () => {
             alt="faculty profile"
             className="h-[200px] w-[200px] object-cover rounded-lg shadow-md"
           />
+          </div>
         </>
       )}
     </div>

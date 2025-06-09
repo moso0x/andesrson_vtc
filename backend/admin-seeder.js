@@ -12,11 +12,11 @@ const seedData = async () => {
 
         await adminCredential.create({
             loginid: 123456,
-            password: "admin123"
+            password: "@anderson123"
         });
 
         const adminDetail = {
-            employeeId: "123456",
+            employeeId: "andeson0231",
             firstName: "Sundar",
             middleName: "R",
             lastName: "Pichai",
