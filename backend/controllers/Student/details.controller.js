@@ -34,7 +34,7 @@ const addDetails = async (req, res) => {
         user = await studentDetails.create({ ...req.body, profile: req.file.filename });
         const data = {
             success: true,
-            message: "Student Details Added!",
+            message: "Student Details Added successfully!",
             user,
         };
         res.json(data);

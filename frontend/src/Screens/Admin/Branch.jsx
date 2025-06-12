@@ -92,7 +92,7 @@ const Branch = () => {
             }border-blue-500 px-4 py-2 text-black rounded-sm mr-6`}
             onClick={() => setSelected("add")}
           >
-            Add Branch
+           Add Department
           </button>
           <button
             className={`${
@@ -100,7 +100,7 @@ const Branch = () => {
             }border-blue-500 px-4 py-2 text-black rounded-sm`}
             onClick={() => setSelected("view")}
           >
-            View Branch
+           View Department
           </button>
         </div>
       </div>
@@ -108,7 +108,7 @@ const Branch = () => {
         <div className="flex flex-col justify-center items-center w-full mt-8">
           <div className="w-[40%]">
             <label htmlFor="name" className="leading-7 text-sm ">
-              Enter Branch Name
+              Enter Department Name
             </label>
             <input
               type="name"
@@ -122,7 +122,7 @@ const Branch = () => {
             className="mt-6 bg-blue-500 px-6 py-3 text-white"
             onClick={addBranchHandler}
           >
-            Add Branch
+            Add Department
           </button>
         </div>
       )}
