@@ -1,40 +1,44 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useLocation } from "react-router-dom";
 import { setUserData } from "../../redux/actions";
 import { baseApiURL } from "../../baseUrl";
 import toast from "react-hot-toast";
+import { useLocation } from "react-router-dom";
+
 const Profile = () => {
+  const location = useLocation();
+  const { loginid, type } = location.state || {};
+
   const [showPass, setShowPass] = useState(false);
-  const router = useLocation();
   const [data, setData] = useState();
   const dispatch = useDispatch();
   const [password, setPassword] = useState({
     new: "",
     current: "",
   });
+
   useEffect(() => {
-    const headers = {
-      "Content-Type": "application/json",
-    };
+    if (!loginid || !type) return;
+
     axios
       .post(
-        `${baseApiURL()}/${router.state.type}/details/getDetails`,
-        { enrollmentNo: router.state.loginid },
+        `${baseApiURL()}/${type}/details/getDetails`,
+        { enrollmentNo: loginid },
         {
-          headers: headers,
+          headers: { "Content-Type": "application/json" },
         }
       )
       .then((response) => {
         if (response.data.success) {
-          setData(response.data.user[0]);
+          const user = response.data.user[0];
+          setData(user);
           dispatch(
             setUserData({
-              fullname: `${response.data.user[0].firstName} ${response.data.user[0].middleName} ${response.data.user[0].lastName}`,
-              semester: response.data.user[0].semester,
-              enrollmentNo: response.data.user[0].enrollmentNo,
-              branch: response.data.user[0].branch,
+              fullname: `${user.firstName} ${user.middleName} ${user.lastName}`,
+              semester: user.semester,
+              enrollmentNo: user.enrollmentNo,
+              branch: user.branch,
             })
           );
         } else {
@@ -43,20 +47,19 @@ const Profile = () => {
       })
       .catch((error) => {
         console.error(error);
+        toast.error("Failed to load profile.");
       });
-  }, [dispatch, router.state.loginid, router.state.type]);
+  }, [dispatch, loginid, type]);
 
   const checkPasswordHandler = (e) => {
     e.preventDefault();
-    const headers = {
-      "Content-Type": "application/json",
-    };
+
     axios
       .post(
         `${baseApiURL()}/student/auth/login`,
-        { loginid: router.state.loginid, password: password.current },
+        { loginid, password: password.current },
         {
-          headers: headers,
+          headers: { "Content-Type": "application/json" },
         }
       )
       .then((response) => {
@@ -67,21 +70,18 @@ const Profile = () => {
         }
       })
       .catch((error) => {
-        toast.error(error.response.data.message);
+        toast.error(error.response?.data?.message || "Login failed.");
         console.error(error);
       });
   };
 
   const changePasswordHandler = (id) => {
-    const headers = {
-      "Content-Type": "application/json",
-    };
     axios
       .put(
         `${baseApiURL()}/student/auth/update/${id}`,
-        { loginid: router.state.loginid, password: password.new },
+        { loginid, password: password.new },
         {
-          headers: headers,
+          headers: { "Content-Type": "application/json" },
         }
       )
       .then((response) => {
@@ -93,45 +93,45 @@ const Profile = () => {
         }
       })
       .catch((error) => {
-        toast.error(error.response.data.message);
+        toast.error(error.response?.data?.message || "Update failed.");
         console.error(error);
       });
   };
 
+  if (!loginid || !type) {
+    return (
+      <div className="p-4 text-red-600 font-semibold">
+        Invalid session. Please login again.
+      </div>
+    );
+  }
+
   return (
-    <div className="w-full mx-auto my-8 flex justify-between items-start">
+    <div className="w-full mx-auto my-8 flex justify-between items-start flex-wrap">
       {data && (
         <>
-          <div>
+          <div className="max-w-xl">
             <p className="text-2xl font-semibold">
-              Hello {data.firstName} {data.middleName} {data.lastName}👋
+              Hello {data.firstName} {data.middleName} {data.lastName} 👋
             </p>
             <div className="mt-3">
-              <p className="text-lg font-normal mb-2">
-                Enrollment No: {data.enrollmentNo}
-              </p>
-              <p className="text-lg font-normal mb-2">Branch: {data.branch}</p>
-              <p className="text-lg font-normal mb-2">
-                Semester: {data.semester}
-              </p>
-              <p className="text-lg font-normal mb-2">
-                Phone Number: +91 {data.phoneNumber}
-              </p>
-              <p className="text-lg font-normal mb-2">
-                Email Address: {data.email}
-              </p>
+              <p className="text-lg mb-2">Enrollment No: {data.enrollmentNo}</p>
+              <p className="text-lg mb-2">Branch: {data.branch}</p>
+              <p className="text-lg mb-2">Semester: {data.semester}</p>
+              <p className="text-lg mb-2">Phone Number: +91 {data.phoneNumber}</p>
+              <p className="text-lg mb-2">Email Address: {data.email}</p>
             </div>
             <button
               className={`${
                 showPass ? "bg-red-100 text-red-600" : "bg-blue-600 text-white"
-              }  px-3 py-1 rounded mt-4`}
+              } px-3 py-1 rounded mt-4`}
               onClick={() => setShowPass(!showPass)}
             >
               {!showPass ? "Change Password" : "Close Change Password"}
             </button>
             {showPass && (
               <form
-                className="mt-4 border-t-2 border-blue-500 flex flex-col justify-center items-start"
+                className="mt-4 border-t-2 border-blue-500 flex flex-col items-start"
                 onSubmit={checkPasswordHandler}
               >
                 <input
@@ -141,7 +141,8 @@ const Profile = () => {
                     setPassword({ ...password, current: e.target.value })
                   }
                   placeholder="Current Password"
-                  className="px-3 py-1 border-2 border-blue-500 outline-none rounded mt-4"
+                  className="px-3 py-1 border-2 border-blue-500 rounded mt-4"
+                  required
                 />
                 <input
                   type="password"
@@ -150,11 +151,11 @@ const Profile = () => {
                     setPassword({ ...password, new: e.target.value })
                   }
                   placeholder="New Password"
-                  className="px-3 py-1 border-2 border-blue-500 outline-none rounded mt-4"
+                  className="px-3 py-1 border-2 border-blue-500 rounded mt-4"
+                  required
                 />
                 <button
-                  className="mt-4 hover:border-b-2 hover:border-blue-500"
-                  onClick={checkPasswordHandler}
+                  className="mt-4 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
                   type="submit"
                 >
                   Change Password
@@ -162,10 +163,15 @@ const Profile = () => {
               </form>
             )}
           </div>
+
           <img
-            src={process.env.REACT_APP_MEDIA_LINK + "/" + data.profile}
+            src={
+              data.profile
+                ? `${process.env.REACT_APP_MEDIA_LINK}/${data.profile}`
+                : "https://via.placeholder.com/240?text=No+Image"
+            }
             alt="student profile"
-            className="h-[240px] w-[240px] object-cover rounded-lg shadow-md"
+            className="h-[240px] w-[240px] object-cover rounded-lg shadow-md mt-6 sm:mt-0"
           />
         </>
       )}

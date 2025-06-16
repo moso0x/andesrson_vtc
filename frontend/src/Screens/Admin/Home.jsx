@@ -17,7 +17,10 @@ import {
   FaUserGraduate,
   FaChalkboardTeacher,
   FaInfoCircle,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
+import { RiShieldUserLine } from "react-icons/ri";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import { MdOutlineLibraryBooks } from "react-icons/md";
 
@@ -49,12 +52,11 @@ const menuItems = [
     label: "Course",
     icon: <FaBookOpen className="w-5 h-5 text-blue-800" />,
   },
-  // You can uncomment and enable these if needed
-  // {
-  //   key: "Admin",
-  //   label: "Admin",
-  //   icon: <RiShieldUserLine className="w-5 h-5 text-gray-800" />,
-  // },
+  {
+    key: "Admin",
+    label: "Admin",
+    icon: <RiShieldUserLine className="w-5 h-5 text-gray-800" />,
+  },
   {
     key: "Profile",
     label: "Profile",
@@ -67,14 +69,17 @@ const Home = () => {
   const navigate = useNavigate();
   const [load, setLoad] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState("Profile");
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [dashboardData, setDashboardData] = useState({
     studentCount: "",
     facultyCount: "",
   });
 
   useEffect(() => {
-    if (location.state === null) {
+    if (!location.state) {
+      toast.error("Invalid session. Redirecting...");
       navigate("/");
+      return;
     }
     setLoad(true);
   }, [navigate, location.state]);
@@ -126,7 +131,7 @@ const Home = () => {
         return <Admin />;
       case "Profile":
       default:
-        return <Profile />;
+        return <Profile locationState={location.state} />;
     }
   };
 
@@ -137,27 +142,43 @@ const Home = () => {
           <Navbar />
           <div className="flex min-h-screen">
             {/* Sidebar */}
-            <div className="w-64 bg-gray-100 border-r shadow-sm p-4">
-              <h2 className="text-2xl font-semibold mb-6 text-gray-700">Dashboard</h2>
-              <ul className="space-y-2">
+            <div
+              className={`${
+                sidebarOpen ? "w-64" : "w-16"
+              } transition-all duration-300 bg-[#f8fafc] border-r shadow-sm p-4 flex flex-col`}
+            >
+              <div className="flex items-center justify-between mb-6">
+                {sidebarOpen && (
+                  <h2 className="text-xl font-semibold text-gray-700">Dashboard</h2>
+                )}
+                <button
+                  onClick={() => setSidebarOpen((prev) => !prev)}
+                  className="text-gray-600 hover:text-blue-600 ml-auto"
+                >
+                  {sidebarOpen ? <FaTimes /> : <FaBars />}
+                </button>
+              </div>
+
+              <ul className="space-y-4">
                 {menuItems.map((item) => (
                   <li
                     key={item.key}
                     onClick={() => setSelectedMenu(item.key)}
-                    className={`flex items-center gap-3 px-4 py-2 rounded-md cursor-pointer transition ${
+                    title={!sidebarOpen ? item.label : ""}
+                    className={`group flex items-center gap-4 px-3 py-3 rounded-lg cursor-pointer transition-colors relative ${
                       selectedMenu === item.key
                         ? "bg-blue-100 text-blue-700 font-semibold"
-                        : "hover:bg-gray-200 text-gray-700"
+                        : "hover:bg-blue-50 text-gray-800"
                     }`}
                   >
-                    {item.icon}
-                    <span>{item.label}</span>
-                    {item.key === "Student" && dashboardData.studentCount && (
+                    <span>{item.icon}</span>
+                    {sidebarOpen && <span>{item.label}</span>}
+                    {sidebarOpen && item.key === "Student" && dashboardData.studentCount && (
                       <span className="ml-auto text-sm text-gray-500">
                         {dashboardData.studentCount}
                       </span>
                     )}
-                    {item.key === "Faculty" && dashboardData.facultyCount && (
+                    {sidebarOpen && item.key === "Faculty" && dashboardData.facultyCount && (
                       <span className="ml-auto text-sm text-gray-500">
                         {dashboardData.facultyCount}
                       </span>
@@ -168,7 +189,9 @@ const Home = () => {
             </div>
 
             {/* Main Content */}
-            <div className="flex-1 p-6 bg-white overflow-y-auto">{renderContent()}</div>
+            <div className="flex-1 p-6 bg-white overflow-y-auto transition-all duration-300">
+              {renderContent()}
+            </div>
           </div>
         </>
       )}
